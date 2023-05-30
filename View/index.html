@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get All Students</title>
+</head>
+<body>
+    <h1>Get All Students</h1>
+    <button onclick="getAllStudents()">Get All Students</button>
+    <div id="studentsList"></div>
+
+    <script>
+        function getAllStudents() {
+            fetch("../Controller/getAllStudents.php")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        let studentsList = '';
+                        data.data.forEach(student => {
+                            studentsList += `<p>Student ID: ${student.id}</p>`;
+                            studentsList += `<p>Name: ${student.name}</p>`;
+                            studentsList += `<p>Email: ${student.email}</p>`;
+                            studentsList += `<hr>`;
+                        });
+                        document.getElementById('studentsList').innerHTML = studentsList;
+                    } else {
+                        document.getElementById('studentsList').innerHTML = 'Error: ' + data.data.error;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('studentsList').innerHTML = 'An error occurred while fetching students.';
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+</html>
